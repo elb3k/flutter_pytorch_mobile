@@ -22,8 +22,12 @@ A new flutter plugin project.
   s.static_framework = true
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'LibTorch', '~> 1.8.0'
+  s.dependency 'LibTorch_vision_ops', '~> 0.9.0'
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
       'HEADER_SEARCH_PATHS' => '$(inherited) "${PODS_ROOT}/LibTorch/install/include"'
   }
+  # s.user_target_xcconfig = {
+  #   'OTHER_LDFLAGS' => '-force_load "$(PODS_ROOT)/LibTorch_vision_ops/lib/libtorchvision_ops.a"',
+  # }
 end

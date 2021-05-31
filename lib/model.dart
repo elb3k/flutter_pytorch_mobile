@@ -31,8 +31,9 @@ class Model {
       {List<double> mean = TORCHVISION_NORM_MEAN_RGB,
       List<double> std = TORCHVISION_NORM_STD_RGB}) async {
     // Assert mean std
-    assert(mean.length == 3, "Mean should have size of 3");
-    assert(std.length == 3, "STD should have size of 3");
+    assert(mean.length == 3, "mean should have size of 3");
+    assert(std.length == 3, "std should have size of 3");
+
     List<String> labels = await _getLabels(labelPath);
     List byteArray = image.readAsBytesSync();
     final List? prediction = await _channel.invokeListMethod("predictImage", {
@@ -69,6 +70,39 @@ class Model {
       "mean": mean,
       "std": std
     });
+    return prediction;
+  }
+
+  ///detectron model
+  Future<List<List>?> getDetectron2(
+      File image, int width, int height, String labelPath,
+      {List<double> mean = TORCHVISION_NORM_MEAN_RGB,
+      List<double> std = TORCHVISION_NORM_STD_RGB,
+      double minScore = 0.4}) async {
+    // Assert mean std
+    assert(mean.length == 3, "Mean should have size of 3");
+    assert(std.length == 3, "STD should have size of 3");
+    // Assert score
+    assert(minScore >= 0.0 && minScore <= 1.0,
+        "Minimum score between 0.0 and 1.0");
+
+    final labels = await _getLabels(labelPath);
+
+    final List<List>? prediction =
+        await _channel.invokeListMethod('detectron2', {
+      "index": _index,
+      "image": image.readAsBytesSync(),
+      "width": width,
+      "height": height,
+      "mean": mean,
+      "std": std,
+      "minScore": minScore
+    });
+
+    for (int i = 0; i < prediction!.length; i++) {
+      int index = prediction[i][5].toInt();
+      prediction[i][5] = labels[index];
+    }
     return prediction;
   }
 

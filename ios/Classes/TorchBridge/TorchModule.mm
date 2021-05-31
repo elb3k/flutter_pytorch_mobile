@@ -12,8 +12,8 @@
     self = [super init];
     if (self) {
       try {
-          _module = torch::jit::load(filePath.UTF8String);
-          _module.eval();
+            _module = torch::jit::load(filePath.UTF8String);
+            _module.eval();
       } catch (const std::exception& e) {
           NSLog(@"%s", e.what());
           return nil;	
@@ -48,6 +48,38 @@
         return [results copy];
     } catch (const std::exception& e) {
         NSLog(@"%s", e.what());
+    }
+    return nil;
+}
+- (NSArray<NSArray* >*) detectron2:(void*)imageBuffer withWidth:(int)width withHeight:(int)height withMinScore: (float)minScore {
+    try {
+        at::Tensor tensor = torch::from_blob(imageBuffer, {1, 3, height, width}, at::kFloat);
+        torch::autograd::AutoGradMode guard(false);
+        at::AutoNonVariableTypeMode non_var_type_mode(true);
+        
+        auto outputDict = _module.forward({tensor}).toGenericDict();
+        const int64_t n = outputDict.at("scores").toTensor().size(0);
+
+        const float* boxes = outputDict.at("boxes").toTensor().data_ptr<float>();
+        const float* scores = outputDict.at("scores").toTensor().data_ptr<float>();
+        const int64_t* labels = outputDict.at("labels").toTensor().data_ptr<int64_t>();
+
+        NSMutableArray<NSArray* >* results = [[NSMutableArray<NSArray* > alloc] init];
+        for (int64_t i = 0; i < n; i++) {
+            if(scores[i] < minScore)
+                continue;
+
+            NSArray* detection = @[ @(boxes[4 * i + 0]), @(boxes[4 * i + 1]), @(boxes[4 * i + 2]), @(boxes[4 * i + 3])
+                                            , @(scores[i])
+                                            , @(labels[i]-1)
+                                            ];
+
+            [results addObject: detection];   
+        }
+        
+        return [results copy];
+    } catch (const std::exception& e) {
+        NSLog(@"Detectron2: %s", e.what());
     }
     return nil;
 }
