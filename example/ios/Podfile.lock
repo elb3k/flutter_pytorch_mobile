@@ -7,14 +7,20 @@ PODS:
   - LibTorch/Core (1.8.0):
     - LibTorch/Torch
   - LibTorch/Torch (1.8.0)
+<<<<<<< HEAD
   - LibTorch_vision_ops (0.9.1):
     - LibTorch (= 1.8.0)
+=======
+>>>>>>> c5a549254d18318ae6eae88ad7857cca092e3fbd
   - path_provider (0.0.1):
     - Flutter
   - pytorch_mobile (0.0.1):
     - Flutter
     - LibTorch (~> 1.8.0)
+<<<<<<< HEAD
     - LibTorch_vision_ops (~> 0.9.0)
+=======
+>>>>>>> c5a549254d18318ae6eae88ad7857cca092e3fbd
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -41,9 +47,14 @@ SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   image_picker: 50e7c7ff960e5f58faa4d1f4af84a771c671bc4a
   LibTorch: d7724112589515bedd5eadf14a9db5b1d62d8a34
+<<<<<<< HEAD
   LibTorch_vision_ops: 46591a86c5819adb26a84f44b1011de271115662
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   pytorch_mobile: 64c3c0d68eef59be46965dbdf69e8a01265544bf
+=======
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  pytorch_mobile: cdb1566b9883c59662d443e904db6674e829dd84
+>>>>>>> c5a549254d18318ae6eae88ad7857cca092e3fbd
 
 PODFILE CHECKSUM: d9646c0250b6c86682c69a86e40f54c636c64ae4
 
